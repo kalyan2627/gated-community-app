@@ -480,7 +480,7 @@ export default function AdminHomeScreen({ navigation }) {
             <SOSAlertBanner
               count={activeSOS.length}
               latest={latestSOS}
-              onPress={() => navigation.navigate('VisitorLogs')}
+              onPress={() => navigation.navigate('AdminSOS')}
             />
           )}
 
@@ -522,7 +522,7 @@ export default function AdminHomeScreen({ navigation }) {
                 { emoji: '🛡️', label: 'Guards',     color: P.teal,    route: 'GuardManagement',  badge: 0 },
                 { emoji: '👔', label: 'Staff',       color: '#6A1B9A', route: 'StaffManagement',  badge: 0 },
                 { emoji: '🚫', label: 'Blacklist',   color: P.danger,  route: 'AdminBlacklist',   badge: blacklist?.length ?? 0 },
-                { emoji: '📦', label: 'Deliveries',  color: '#0D9488', route: 'VisitorLogs',      badge: pendingDeliveries },
+                { emoji: '📦', label: 'Deliveries',  color: '#0D9488', route: 'AdminDeliveries',  badge: pendingDeliveries },
               ]}
             />
           </View>
@@ -547,8 +547,8 @@ export default function AdminHomeScreen({ navigation }) {
             <ShortcutRow
               navigation={navigation}
               items={[
+                { emoji: '🚨', label: 'SOS Alerts',   color: '#DC2626', route: 'AdminSOS',          badge: activeSOS.length },
                 { emoji: '📋', label: 'Notice Board', color: P.teal,    route: 'AdminNoticeBoard',  badge: 0 },
-                { emoji: '📢', label: 'Announce',     color: '#F57F17', route: 'Announcements',     badge: 0 },
                 { emoji: '🔩', label: 'AMC',          color: '#0D9488', route: 'AMC',               badge: 0 },
                 { emoji: '🏠', label: 'Real Estate',  color: '#1565C0', route: 'RealEstateAdmin',   badge: pendingP2P },
                 { emoji: '🅿️', label: 'Parking',      color: P.teal,    route: 'VisitorParkingAdmin', badge: 0 },

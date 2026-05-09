@@ -59,11 +59,12 @@ export default function AdminMoreScreen({ navigation }) {
 
       {/* Header */}
       <View style={s.header}>
-        <TouchableOpacity style={s.backBtn} onPress={() => navigation.goBack()}>
-          <Text style={s.backText}>‹</Text>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={s.backText}>← Back</Text>
         </TouchableOpacity>
-        <Text style={s.headerTitle}>More</Text>
-        <View style={{ width: 44 }} />
+        <View style={s.headerRow}>
+          <Text style={s.headerTitle}>☰ More</Text>
+        </View>
       </View>
 
       <ScrollView style={s.body} contentContainerStyle={{ padding: 16 }} showsVerticalScrollIndicator={false}>
@@ -101,7 +102,7 @@ export default function AdminMoreScreen({ navigation }) {
         {/* Operations */}
         <SectionLabel title="Operations" />
         <View style={s.card}>
-          <MenuRow icon="📢" label="Announcements"    sub="Post notices & events"          color={P.teal}    onPress={() => navigation.navigate('Announcements')} />
+          <MenuRow icon="🚨" label="SOS Alerts"      sub="Emergency alerts & responses"   color="#DC2626"  onPress={() => navigation.navigate('AdminSOS')} />
           <View style={s.divider} />
           <MenuRow icon="📋" label="Notice Board"     sub="Manage notices"                 color={P.teal}    onPress={() => navigation.navigate('AdminNoticeBoard')} />
           <View style={s.divider} />
@@ -202,9 +203,9 @@ const s = StyleSheet.create({
   root:        { flex: 1, backgroundColor: P.tealDeep },
   safeTop:     { backgroundColor: P.tealDeep },
   header:      { backgroundColor: '#1A7A7A', paddingTop: 40, paddingBottom: 16, paddingHorizontal: 20 },
-  backBtn:     { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-  backText:    { color: '#FFF', fontSize: 28, fontWeight: '300', lineHeight: 32 },
-  headerTitle: { flex: 1, color: '#FFF', fontSize: 17, fontWeight: '800', textAlign: 'center' },
+  backText:    { color: 'rgba(255,255,255,0.85)', fontSize: 14, fontWeight: '600', marginBottom: 8 },
+  headerRow:   { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  headerTitle: { fontSize: 22, fontWeight: '900', color: '#FFF' },
 
   body:        { flex: 1, backgroundColor: P.bg },
 

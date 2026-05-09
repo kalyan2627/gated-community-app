@@ -84,15 +84,15 @@ function LogRow({ log, last }) {
   );
 }
 const ls = StyleSheet.create({
-  row:         { paddingVertical: 12 },
+  row:         { paddingVertical: 8 },
   border:      { borderBottomWidth: 1, borderBottomColor: P.border },
-  actionBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
-  actionText:  { fontSize: 10, fontWeight: '800', letterSpacing: 0.5 },
-  moduleBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6, backgroundColor: P.tealSoft },
-  moduleText:  { fontSize: 10, fontWeight: '700', color: P.teal },
-  detail:      { fontSize: 13, color: P.text, fontWeight: '600', lineHeight: 18 },
-  user:        { fontSize: 11, color: P.textMuted },
-  time:        { fontSize: 11, color: P.textMuted },
+  actionBadge: { paddingHorizontal: 6, paddingVertical: 2, borderRadius: 5 },
+  actionText:  { fontSize: 9, fontWeight: '800', letterSpacing: 0.5 },
+  moduleBadge: { paddingHorizontal: 6, paddingVertical: 2, borderRadius: 5, backgroundColor: P.tealSoft },
+  moduleText:  { fontSize: 9, fontWeight: '700', color: P.teal },
+  detail:      { fontSize: 12, color: P.text, fontWeight: '600', lineHeight: 16 },
+  user:        { fontSize: 10, color: P.textMuted },
+  time:        { fontSize: 10, color: P.textMuted },
 });
 
 export default function AuditLogsScreen({ navigation }) {
@@ -121,12 +121,16 @@ export default function AuditLogsScreen({ navigation }) {
   return (
     <SafeAreaView style={s.safe}>
       <StatusBar barStyle="light-content" backgroundColor="#1A7A7A" />
-            <View style={s.header}>
+      <View style={s.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={s.backText}>← Back</Text>
         </TouchableOpacity>
-        <Text style={s.headerTitle}>📋 Audit Logs</Text>
-        <Text style={s.headerSub}>All admin actions & activity</Text>
+        <View style={s.headerRow}>
+          <View style={{ flex: 1 }}>
+            <Text style={s.headerTitle}>📋 Audit Logs</Text>
+            <Text style={s.headerSub}>All admin actions & activity</Text>
+          </View>
+        </View>
       </View>
 
       {/* Search */}
@@ -136,31 +140,35 @@ export default function AuditLogsScreen({ navigation }) {
       </View>
 
       {/* Module filter */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}
-        style={s.tabScroll} contentContainerStyle={{ paddingHorizontal: 16, gap: 8 }}>
-        {MODULES.map(m => (
-          <TouchableOpacity key={m}
-            style={[s.chip, moduleTab === m && s.chipActive]}
-            onPress={() => setModuleTab(m)}>
-            <Text style={[s.chipText, moduleTab === m && { color: '#FFF' }]}>{m}</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+      <View style={s.tabWrap}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: 16, gap: 8, alignItems: 'center' }}>
+          {MODULES.map(m => (
+            <TouchableOpacity key={m}
+              style={[s.chip, moduleTab === m && s.chipActive]}
+              onPress={() => setModuleTab(m)}>
+              <Text style={[s.chipText, moduleTab === m && { color: '#FFF' }]}>{m}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
 
       {/* Action filter */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}
-        style={[s.tabScroll, { marginTop: 0 }]} contentContainerStyle={{ paddingHorizontal: 16, gap: 8 }}>
-        {actions.map(a => {
-          const ac = ACTION_COLORS[a];
-          return (
-            <TouchableOpacity key={a}
-              style={[s.chip, actionFilter === a && { backgroundColor: ac?.bg || P.tealSoft, borderColor: ac?.text || P.teal }]}
-              onPress={() => setActionFilter(a)}>
-              <Text style={[s.chipText, actionFilter === a && { color: ac?.text || P.teal }]}>{a}</Text>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
+      <View style={s.tabWrap}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: 16, gap: 8, alignItems: 'center' }}>
+          {actions.map(a => {
+            const ac = ACTION_COLORS[a];
+            return (
+              <TouchableOpacity key={a}
+                style={[s.chip, actionFilter === a && { backgroundColor: ac?.bg || P.tealSoft, borderColor: ac?.text || P.teal }]}
+                onPress={() => setActionFilter(a)}>
+                <Text style={[s.chipText, actionFilter === a && { color: ac?.text || P.teal }]}>{a}</Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+      </View>
 
       {/* Logs */}
       <FlatList
@@ -181,22 +189,18 @@ export default function AuditLogsScreen({ navigation }) {
 }
 
 const s = StyleSheet.create({
-  safe:       { flex: 1, backgroundColor: P.tealDark },
-  header:     { flexDirection: 'row', alignItems: 'center', backgroundColor: P.tealDark, padding: 16, paddingTop: 8 },
-  back:       { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-  backTxt:    { color: '#FFF', fontSize: 28, fontWeight: '300', lineHeight: 32 },
-  htitle:     { color: '#FFF', fontSize: 17, fontWeight: '800' },
-  hsub:       { color: 'rgba(255,255,255,0.7)', fontSize: 12, marginTop: 2 },
-  searchWrap: { backgroundColor: P.bg, paddingHorizontal: 16, paddingTop: 12, paddingBottom: 4 },
-  searchInput:{ backgroundColor: P.surface, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 11, fontSize: 14, color: P.text, borderWidth: 1, borderColor: P.border },
-  tabScroll:  { backgroundColor: P.bg, paddingVertical: 8, maxHeight: 52 },
-  chip:       { paddingHorizontal: 12, paddingVertical: 7, borderRadius: 20, borderWidth: 1.5, borderColor: P.border, backgroundColor: P.surface },
-  chipActive: { backgroundColor: P.teal, borderColor: P.teal },
-  chipText:   { fontSize: 12, fontWeight: '600', color: P.textMuted },
-  empty:      { alignItems: 'center', paddingTop: 60 },
-  emptyText:  { fontSize: 15, color: P.textMuted, fontWeight: '600' },
+  safe:        { flex: 1, backgroundColor: '#1A7A7A' },
   header:      { backgroundColor: '#1A7A7A', paddingTop: 40, paddingBottom: 16, paddingHorizontal: 20 },
   backText:    { color: 'rgba(255,255,255,0.85)', fontSize: 14, fontWeight: '600', marginBottom: 8 },
-  headerTitle: { fontSize: 22, fontWeight: '900', color: '#FFF', marginBottom: 2 },
+  headerRow:   { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  headerTitle: { fontSize: 22, fontWeight: '900', color: '#FFF' },
   headerSub:   { fontSize: 12, color: 'rgba(255,255,255,0.72)', marginTop: 1 },
+  searchWrap:  { backgroundColor: P.bg, paddingHorizontal: 16, paddingTop: 12, paddingBottom: 4 },
+  searchInput: { backgroundColor: P.surface, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 11, fontSize: 14, color: P.text, borderWidth: 1, borderColor: P.border },
+  tabWrap:     { backgroundColor: P.bg, paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: P.border },
+  chip:        { paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20, borderWidth: 1, borderColor: P.border, backgroundColor: P.surface },
+  chipActive:  { backgroundColor: P.teal, borderColor: P.teal },
+  chipText:    { fontSize: 11, fontWeight: '600', color: P.textMuted },
+  empty:       { alignItems: 'center', paddingTop: 60 },
+  emptyText:   { fontSize: 15, color: P.textMuted, fontWeight: '600' },
 });

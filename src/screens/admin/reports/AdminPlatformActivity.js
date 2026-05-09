@@ -19,15 +19,6 @@ const C = {
   bg: '#F5F7FA', card: '#FFF', border: '#E2E8F0', text: '#1E293B', muted: '#64748B',
 };
 
-function Hdr({ title, onBack }) {
-  return (
-    <View style={s.hdr}>
-      <TouchableOpacity onPress={onBack} style={s.back}><Text style={s.backT}>‹</Text></TouchableOpacity>
-      <Text style={s.hdrT}>{title}</Text>
-      <View style={{ width: 44 }} />
-    </View>
-  );
-}
 
 function timeAgo(d) {
   if (!d) return '—';
@@ -40,7 +31,7 @@ function timeAgo(d) {
 }
 
 // ─── ADMIN PLATFORM ACTIVITY SCREEN ───────────────────────────────────────────
-export function AdminPlatformActivityScreen({ navigation }) {
+export default function AdminPlatformActivityScreen({ navigation }) {
   const theme = useTheme();
   const entryLogs       = useSecurityStore(s => s.entryLogs);
   const visitors        = useSecurityStore(s => s.visitors);
@@ -147,8 +138,18 @@ export function AdminPlatformActivityScreen({ navigation }) {
 
   return (
     <SafeAreaView style={s.screen}>
-      <StatusBar barStyle={theme.mode === 'light' ? 'dark-content' : 'light-content'} backgroundColor={theme.header} />
-      <Hdr title="📋 Platform Activity" onBack={() => navigation.goBack()} />
+      <StatusBar barStyle="light-content" backgroundColor="#1A7A7A" />
+      <View style={s.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={s.backText}>← Back</Text>
+        </TouchableOpacity>
+        <View style={s.headerRow}>
+          <View style={{ flex: 1 }}>
+            <Text style={s.headerTitle}>📋 Platform Activity</Text>
+            <Text style={s.headerSub}>{activities.length} total events · {todayCount} today</Text>
+          </View>
+        </View>
+      </View>
 
       {/* Summary */}
       <View style={s.summaryRow}>
@@ -171,13 +172,15 @@ export function AdminPlatformActivityScreen({ navigation }) {
       </View>
 
       {/* Filter */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={s.filterRow} contentContainerStyle={{ paddingHorizontal: 16, gap: 8, flexDirection: 'row' }}>
-        {FILTERS.map(f => (
-          <TouchableOpacity key={f.id} style={[s.chip, filter === f.id && s.chipA]} onPress={() => setFilter(f.id)}>
-            <Text style={[s.chipT, filter === f.id && s.chipTA]}>{f.label} {filter === f.id ? `(${filtered.length})` : ''}</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+      <View style={s.filterRow}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, gap: 8, alignItems: 'center' }}>
+          {FILTERS.map(f => (
+            <TouchableOpacity key={f.id} style={[s.chip, filter === f.id && s.chipA]} onPress={() => setFilter(f.id)}>
+              <Text style={[s.chipT, filter === f.id && s.chipTA]}>{f.label} {filter === f.id ? `(${filtered.length})` : ''}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
 
       <FlatList
         data={filtered}
@@ -194,14 +197,14 @@ export function AdminPlatformActivityScreen({ navigation }) {
           <View style={s.timelineItem}>
             <View style={s.timelineLeft}>
               <View style={[s.timelineDot, { backgroundColor: item.color + '20', borderWidth: 2, borderColor: item.color }]}>
-                <Text style={{ fontSize: 13 }}>{item.emoji}</Text>
+                <Text style={{ fontSize: 11 }}>{item.emoji}</Text>
               </View>
               {index < filtered.length - 1 && <View style={s.timelineLine} />}
             </View>
-            <View style={[s.card, { flex: 1, marginLeft: 12, marginBottom: 16 }]}>
+            <View style={[s.card, { flex: 1, marginLeft: 10, marginBottom: 10 }]}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={[s.cardT, { color: item.color, flex: 1 }]} numberOfLines={1}>{item.title}</Text>
-                <Text style={{ fontSize: 11, color: C.muted, marginLeft: 8 }}>{timeAgo(item.at)}</Text>
+                <Text style={{ fontSize: 10, color: C.muted, marginLeft: 6 }}>{timeAgo(item.at)}</Text>
               </View>
               <Text style={s.cardS}>{item.sub}</Text>
               <Text style={[s.cardS, { color: C.muted }]}>{item.detail}</Text>
@@ -385,35 +388,36 @@ export function AdminRevenueScreen({ navigation }) {
 
 const s = StyleSheet.create({
   screen:       { flex: 1, backgroundColor: C.bg },
-  hdr:          { backgroundColor: C.primary, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14 },
-  back:         { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-  backT:        { color: '#FFFFFF', fontSize: 28, fontWeight: '300' },
-  hdrT:         { flex: 1, color: '#FFFFFF', fontSize: 17, fontWeight: '800', textAlign: 'center' },
-  filterRow:    { backgroundColor: '#FFFFFF', borderBottomWidth: 1, borderBottomColor: C.border, paddingVertical: 10, maxHeight: 52 },
-  chip:         { paddingHorizontal: 14, paddingVertical: 7, borderRadius: 20, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: C.border },
+  header:       { backgroundColor: '#1A7A7A', paddingTop: 40, paddingBottom: 16, paddingHorizontal: 20 },
+  backText:     { color: 'rgba(255,255,255,0.85)', fontSize: 14, fontWeight: '600', marginBottom: 8 },
+  headerRow:    { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  headerTitle:  { fontSize: 22, fontWeight: '900', color: '#FFF' },
+  headerSub:    { fontSize: 12, color: 'rgba(255,255,255,0.72)', marginTop: 1 },
+  chip:         { paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: C.border },
   chipA:        { backgroundColor: C.primary, borderColor: C.primary },
-  chipT:        { fontSize: 12, fontWeight: '700', color: C.muted },
+  chipT:        { fontSize: 11, fontWeight: '700', color: C.muted },
   chipTA:       { color: '#FFFFFF' },
-  summaryRow:   { flexDirection: 'row', backgroundColor: C.primary, paddingVertical: 12, paddingHorizontal: 8 },
+  filterRow:    { backgroundColor: '#FFFFFF', borderBottomWidth: 1, borderBottomColor: C.border, paddingVertical: 8 },
+  summaryRow:   { flexDirection: 'row', backgroundColor: C.primary, paddingVertical: 10, paddingHorizontal: 8 },
   summaryChip:  { flex: 1, alignItems: 'center' },
   summaryV:     { fontSize: 22, fontWeight: '900', color: '#FFFFFF' },
   summaryL:     { fontSize: 10, color: '#7A9E9E', fontWeight: '600', marginTop: 2 },
-  card:         { backgroundColor: C.card, borderRadius: 14, padding: 14, borderWidth: 1, borderColor: C.border },
-  cardT:        { fontSize: 14, fontWeight: '800', color: C.text, marginBottom: 2 },
-  cardS:        { fontSize: 12, color: C.muted, marginTop: 2 },
+  card:         { backgroundColor: C.card, borderRadius: 10, padding: 10, borderWidth: 1, borderColor: C.border },
+  cardT:        { fontSize: 12, fontWeight: '800', color: C.text, marginBottom: 1 },
+  cardS:        { fontSize: 11, color: C.muted, marginTop: 1 },
   sec:          { fontSize: 11, fontWeight: '800', color: C.muted, letterSpacing: 0.8 },
-  empty:        { alignItems: 'center', paddingVertical: 60, gap: 12 },
-  emptyT:       { fontSize: 15, fontWeight: '700', color: C.muted },
+  empty:        { alignItems: 'center', paddingVertical: 40, gap: 12 },
+  emptyT:       { fontSize: 14, fontWeight: '700', color: C.muted },
   tabRow:       { flexDirection: 'row', backgroundColor: '#FFFFFF', borderBottomWidth: 1, borderBottomColor: C.border },
-  tabBtn:       { flex: 1, paddingVertical: 13, alignItems: 'center' },
+  tabBtn:       { flex: 1, paddingVertical: 10, alignItems: 'center' },
   tabBtnA:      { borderBottomWidth: 3, borderBottomColor: C.primary },
-  tabBtnT:      { fontSize: 13, fontWeight: '600', color: C.muted },
+  tabBtnT:      { fontSize: 12, fontWeight: '600', color: C.muted },
   tabBtnTA:     { color: C.primary, fontWeight: '800' },
   // Timeline
   timelineItem: { flexDirection: 'row' },
-  timelineLeft: { alignItems: 'center', width: 48 },
-  timelineDot:  { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center', zIndex: 1 },
-  timelineLine: { flex: 1, width: 2, backgroundColor: C.border, marginTop: 4 },
+  timelineLeft: { alignItems: 'center', width: 40 },
+  timelineDot:  { width: 32, height: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center', zIndex: 1 },
+  timelineLine: { flex: 1, width: 2, backgroundColor: C.border, marginTop: 2 },
   // Revenue
   revenueHero:  { backgroundColor: C.primary, flexDirection: 'row', paddingHorizontal: 20, paddingVertical: 16, alignItems: 'center' },
   heroL:        { color: '#7A9E9E', fontSize: 10, fontWeight: '800', letterSpacing: 0.8, marginBottom: 4 },

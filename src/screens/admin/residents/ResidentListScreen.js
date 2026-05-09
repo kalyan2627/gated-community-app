@@ -12,6 +12,8 @@ const P = {
   danger:'#C62828', warning:'#E65100', success:'#1A7A7A',
 };
 
+const HEADER_BG = '#1A7A7A';
+
 const KYC_COLOR = { verified: P.success, pending: P.warning, rejected: P.danger };
 const KYC_LABEL = { verified: 'KYC ✓', pending: 'KYC Pending', rejected: 'KYC ✗' };
 
@@ -65,17 +67,22 @@ export default function ResidentListScreen({ navigation }) {
   return (
     <View style={s.root}>
       <SafeAreaView style={s.safeTop} />
-      <StatusBar barStyle="light-content" backgroundColor={P.tealDeep} />
+      <StatusBar barStyle="light-content" backgroundColor={HEADER_BG} />
 
-      {/* Header */}
+      {/* Header — matches BlacklistScreen / VisitorLogsScreen pattern */}
       <View style={s.header}>
-        <TouchableOpacity style={s.backBtn} onPress={() => navigation.goBack()}>
-          <Text style={s.backText}>‹</Text>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={s.backText}>← Back</Text>
         </TouchableOpacity>
-        <Text style={s.headerTitle}>Residents ({residents.length})</Text>
-        <TouchableOpacity style={s.addBtn} onPress={() => navigation.navigate('AddResident')}>
-          <Text style={s.addBtnText}>+ Add</Text>
-        </TouchableOpacity>
+        <View style={s.headerRow}>
+          <View style={{ flex: 1 }}>
+            <Text style={s.headerTitle}>👥 Residents</Text>
+            <Text style={s.headerSub}>{residents.length} total · {residents.filter(r => r.active).length} active</Text>
+          </View>
+          <TouchableOpacity style={s.addBtn} onPress={() => navigation.navigate('AddResident')}>
+            <Text style={s.addBtnText}>+ Add</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Body */}
@@ -140,13 +147,14 @@ export default function ResidentListScreen({ navigation }) {
 }
 
 const s = StyleSheet.create({
-  root:        { flex: 1, backgroundColor: P.tealDeep },
-  safeTop:     { backgroundColor: P.tealDeep },
-  header:      { backgroundColor: '#1A7A7A', paddingTop: 40, paddingBottom: 16, paddingHorizontal: 20 },
-  backBtn:     { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-  backText:    { color: '#FFF', fontSize: 28, fontWeight: '300', lineHeight: 32 },
-  headerTitle: { flex: 1, color: '#FFF', fontSize: 17, fontWeight: '800', textAlign: 'center' },
-  addBtn:      { backgroundColor: 'rgba(255,255,255,0.15)', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, marginRight: 8 },
+  root:        { flex: 1, backgroundColor: P.bg },
+  safeTop:     { backgroundColor: HEADER_BG },
+  header:      { backgroundColor: HEADER_BG, paddingTop: 40, paddingBottom: 16, paddingHorizontal: 20 },
+  backText:    { color: 'rgba(255,255,255,0.85)', fontSize: 14, fontWeight: '600', marginBottom: 8 },
+  headerRow:   { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  headerTitle: { fontSize: 22, fontWeight: '900', color: '#FFF' },
+  headerSub:   { fontSize: 12, color: 'rgba(255,255,255,0.72)', marginTop: 1 },
+  addBtn:      { backgroundColor: 'rgba(255,255,255,0.2)', paddingHorizontal: 14, paddingVertical: 7, borderRadius: 20 },
   addBtnText:  { color: '#FFF', fontWeight: '700', fontSize: 13 },
 
   body:        { flex: 1, backgroundColor: P.bg },

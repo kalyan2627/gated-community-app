@@ -10,7 +10,7 @@ import { useTheme } from '../../../hooks/useTheme';
 const SHIFTS = ['Morning', 'Evening', 'Night'];
 const GATES  = ['Main Gate', 'Side Gate', 'Back Gate'];
 
-export default function GuardManagementScreen() {
+export default function GuardManagementScreen({ navigation }) {
   const theme = useTheme();
   const guards            = useAdminStore((s) => s.guards);
   const addGuard          = useAdminStore((s) => s.addGuard);
@@ -63,10 +63,18 @@ export default function GuardManagementScreen() {
   return (
     <SafeAreaView style={globalStyles.screen}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Guards ({guards.length})</Text>
-        <TouchableOpacity style={styles.addBtn} onPress={() => setModalVisible(true)}>
-          <Text style={styles.addBtnText}>+ Add Guard</Text>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={styles.backText}>← Back</Text>
         </TouchableOpacity>
+        <View style={styles.headerRow}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.headerTitle}>🛡️ Guards</Text>
+            <Text style={styles.headerSub}>{guards.length} total · {guards.filter(g => g.active).length} on duty</Text>
+          </View>
+          <TouchableOpacity style={styles.addBtn} onPress={() => setModalVisible(true)}>
+            <Text style={styles.addBtnText}>+ Add Guard</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <FlatList
@@ -128,10 +136,13 @@ export default function GuardManagementScreen() {
 }
 
 const styles = StyleSheet.create({
-  header: { backgroundColor: '#1A7A7A', paddingTop: 40, paddingBottom: 16, paddingHorizontal: 20 },
-  headerTitle: { fontSize: 18, fontWeight: '800', color: COLORS.text },
-  addBtn: { backgroundColor: COLORS.primary, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 10 },
-  addBtnText: { color: '#FFFFFF', fontWeight: '700', fontSize: 14 },
+  header:      { backgroundColor: '#1A7A7A', paddingTop: 40, paddingBottom: 16, paddingHorizontal: 20 },
+  backText:    { color: 'rgba(255,255,255,0.85)', fontSize: 14, fontWeight: '600', marginBottom: 8 },
+  headerRow:   { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  headerTitle: { fontSize: 22, fontWeight: '900', color: '#FFF' },
+  headerSub:   { fontSize: 12, color: 'rgba(255,255,255,0.72)', marginTop: 1 },
+  addBtn:      { backgroundColor: 'rgba(255,255,255,0.2)', paddingHorizontal: 14, paddingVertical: 7, borderRadius: 20 },
+  addBtnText:  { color: '#FFF', fontWeight: '700', fontSize: 13 },
   guardCard: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   avatarCircle: { width: 44, height: 44, borderRadius: 22, backgroundColor: COLORS.primary + '15', alignItems: 'center', justifyContent: 'center' },
   guardName: { fontSize: 15, fontWeight: '700', color: COLORS.text },

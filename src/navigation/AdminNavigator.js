@@ -29,6 +29,7 @@ import AddAmenityScreen     from '../screens/admin/amenities/AddAmenityScreen';
 // Visitors / Blacklist
 import VisitorLogsScreen    from '../screens/admin/visitors/VisitorLogsScreen';
 import BlacklistScreen      from '../screens/admin/visitors/BlacklistScreen';
+import AdminDeliveryScreen  from '../screens/admin/visitors/AdminDeliveryScreen';
 // Notices
 import AdminNoticeBoardScreen from '../screens/admin/notices/AdminNoticeBoardScreen';
 import AnnouncementsScreen    from '../screens/admin/notices/AnnouncementsScreen';
@@ -54,6 +55,8 @@ import VendorManagementScreen from '../screens/admin/settings/VendorManagementSc
 import AMCContractsAdminScreen from '../screens/admin/settings/AMCContractsAdminScreen';
 import AuditLogsScreen        from '../screens/admin/settings/AuditLogsScreen';
 import ModuleToggleScreen     from '../screens/admin/settings/ModuleToggleScreen';
+// SOS
+import AdminSOSScreen        from '../screens/admin/sos/AdminSOSScreen';
 // Verification
 import VerificationScreen from '../screens/auth/VerificationScreen';
 // Profile
@@ -87,6 +90,7 @@ function AdminStack() {
       {/* Visitors / Blacklist */}
       <Stack.Screen name="VisitorLogs"       component={VisitorLogsScreen} />
       <Stack.Screen name="AdminBlacklist"    component={BlacklistScreen} />
+      <Stack.Screen name="AdminDeliveries"   component={AdminDeliveryScreen} />
       {/* Notices */}
       <Stack.Screen name="AdminNoticeBoard"  component={AdminNoticeBoardScreen} />
       <Stack.Screen name="Announcements"     component={AnnouncementsScreen} />
@@ -112,6 +116,8 @@ function AdminStack() {
       <Stack.Screen name="AMCContracts"         component={AMCContractsAdminScreen} />
       <Stack.Screen name="AuditLogs"            component={AuditLogsScreen} />
       <Stack.Screen name="ModuleToggles"        component={ModuleToggleScreen} />
+      {/* SOS */}
+      <Stack.Screen name="AdminSOS"             component={AdminSOSScreen} />
       {/* Verification */}
       <Stack.Screen name="Verification"         component={VerificationScreen} />
       {/* Profile */}

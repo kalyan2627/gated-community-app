@@ -10,7 +10,7 @@ import { useTheme } from '../../../hooks/useTheme';
 const CATEGORIES = ['Maintenance', 'Salary', 'Utilities', 'Cleaning', 'Security', 'Other'];
 const CAT_ICONS  = { Maintenance: '🔧', Salary: '💳', Utilities: '⚡', Cleaning: '🧹', Security: '🛡️', Other: '📦' };
 
-export default function ExpenseScreen() {
+export default function ExpenseScreen({ navigation }) {
   const theme = useTheme();
   const expenses   = useAdminStore((s) => s.expenses);
   const addExpense = useAdminStore((s) => s.addExpense);
@@ -47,16 +47,20 @@ export default function ExpenseScreen() {
 
   return (
     <SafeAreaView style={globalStyles.screen}>
-      <View style={styles.totalBanner}>
-        <Text style={styles.totalLabel}>Total Expenses</Text>
-        <Text style={styles.totalAmount}>₹{total.toLocaleString()}</Text>
-      </View>
-
+      {/* Header — matches standard admin pattern */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>All Expenses</Text>
-        <TouchableOpacity style={styles.addBtn} onPress={() => setModalVisible(true)}>
-          <Text style={styles.addBtnText}>+ Add</Text>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={styles.backText}>← Back</Text>
         </TouchableOpacity>
+        <View style={styles.headerRow}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.headerTitle}>💸 Expenses</Text>
+            <Text style={styles.headerSub}>{expenses.length} entries · Total ₹{total.toLocaleString()}</Text>
+          </View>
+          <TouchableOpacity style={styles.addBtn} onPress={() => setModalVisible(true)}>
+            <Text style={styles.addBtnText}>+ Add</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <FlatList
@@ -112,13 +116,13 @@ export default function ExpenseScreen() {
 }
 
 const styles = StyleSheet.create({
-  totalBanner: { backgroundColor: '#1A7A7A', padding: 20, alignItems: 'center' },
-  totalLabel: { color: '#CE93D8', fontSize: 13, fontWeight: '600' },
-  totalAmount: { color: '#FFFFFF', fontSize: 28, fontWeight: '800', marginTop: 4 },
-  header: { backgroundColor: '#1A7A7A', paddingTop: 40, paddingBottom: 16, paddingHorizontal: 20 },
-  headerTitle: { fontSize: 16, fontWeight: '800', color: COLORS.text },
-  addBtn: { backgroundColor: '#1A7A7A', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 10 },
-  addBtnText: { color: '#FFFFFF', fontWeight: '700' },
+  header:      { backgroundColor: '#1A7A7A', paddingTop: 40, paddingBottom: 16, paddingHorizontal: 20 },
+  backText:    { color: 'rgba(255,255,255,0.85)', fontSize: 14, fontWeight: '600', marginBottom: 8 },
+  headerRow:   { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  headerTitle: { fontSize: 22, fontWeight: '900', color: '#FFF' },
+  headerSub:   { fontSize: 12, color: 'rgba(255,255,255,0.72)', marginTop: 1 },
+  addBtn:      { backgroundColor: 'rgba(255,255,255,0.2)', paddingHorizontal: 14, paddingVertical: 7, borderRadius: 20 },
+  addBtnText:  { color: '#FFF', fontWeight: '700', fontSize: 13 },
   expenseCard: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   iconBox: { width: 44, height: 44, borderRadius: 22, backgroundColor: COLORS.bg, alignItems: 'center', justifyContent: 'center' },
   expenseTitle: { fontSize: 14, fontWeight: '700', color: COLORS.text },

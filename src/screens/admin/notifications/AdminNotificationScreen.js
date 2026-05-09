@@ -33,7 +33,7 @@ export default function AdminNotificationScreen({ navigation }) {
     markNotificationRead(item.id);
     // Navigate to relevant screen
     if (item.type === 'sos' && navigation) {
-      navigation.navigate('Reports');
+      navigation.navigate('AdminSOS');
     } else if (item.type === 'maintenance' && item.requestId && navigation) {
       navigation.navigate('MaintenanceDetail', { requestId: item.requestId });
     }
@@ -65,8 +65,17 @@ export default function AdminNotificationScreen({ navigation }) {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.backText}>← Back</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>🔔 Notifications</Text>
-        <Text style={styles.headerSub}>System alerts & activity</Text>
+        <View style={styles.headerRow}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.headerTitle}>🔔 Notifications</Text>
+            <Text style={styles.headerSub}>{unreadCount > 0 ? `${unreadCount} unread` : 'All caught up'}</Text>
+          </View>
+          {unreadCount > 0 && (
+            <TouchableOpacity onPress={markAllNotificationsRead}>
+              <Text style={styles.markAllText}>Mark all read</Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
 
       <FlatList
@@ -87,9 +96,11 @@ export default function AdminNotificationScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   header:      { backgroundColor: '#1A7A7A', paddingTop: 40, paddingBottom: 16, paddingHorizontal: 20 },
-  backText:     { color: 'rgba(255,255,255,0.85)', fontSize: 14, fontWeight: '600', marginBottom: 8 },
+  backText:    { color: 'rgba(255,255,255,0.85)', fontSize: 14, fontWeight: '600', marginBottom: 8 },
+  headerRow:   { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   headerTitle: { fontSize: 22, fontWeight: '900', color: '#FFF' },
-  markAllText: { color: COLORS.primary, fontSize: 13, fontWeight: '700' },
+  headerSub:   { fontSize: 12, color: 'rgba(255,255,255,0.72)', marginTop: 1 },
+  markAllText: { color: 'rgba(255,255,255,0.85)', fontSize: 13, fontWeight: '700' },
   notifCard: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
   unreadCard: { backgroundColor: COLORS.primary + '08', borderColor: COLORS.primary + '40' },
   iconCircle: { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center', marginTop: 2 },

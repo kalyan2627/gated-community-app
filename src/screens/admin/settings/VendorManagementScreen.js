@@ -187,12 +187,19 @@ export default function VendorManagementScreen({ navigation }) {
       <StatusBar barStyle="light-content" backgroundColor="#1A7A7A" />
 
       {/* Header */}
-            <View style={s.header}>
+      <View style={s.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={s.backText}>← Back</Text>
         </TouchableOpacity>
-        <Text style={s.headerTitle}>🔧 Vendor Management</Text>
-        <Text style={s.headerSub}>Approved vendor directory</Text>
+        <View style={s.headerRow}>
+          <View style={{ flex: 1 }}>
+            <Text style={s.headerTitle}>🔧 Vendor Management</Text>
+            <Text style={s.headerSub}>Approved vendor directory</Text>
+          </View>
+          <TouchableOpacity style={s.addHdr} onPress={() => setShowAdd(true)}>
+            <Text style={s.addHdrTxt}>+ Add</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Stats row */}
@@ -222,15 +229,17 @@ export default function VendorManagementScreen({ navigation }) {
       </View>
 
       {/* Category tabs */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={s.catScroll} contentContainerStyle={{ paddingHorizontal: 16, gap: 8 }}>
-        {CATEGORIES.map(cat => (
-          <TouchableOpacity key={cat}
-            style={[s.catChip, catTab === cat && s.catChipActive]}
-            onPress={() => setCatTab(cat)}>
-            <Text style={[s.catChipText, catTab === cat && { color: '#FFF' }]}>{cat}</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+      <View style={s.catWrap}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 16, gap: 8, alignItems: 'center' }}>
+          {CATEGORIES.map(cat => (
+            <TouchableOpacity key={cat}
+              style={[s.catChip, catTab === cat && s.catChipActive]}
+              onPress={() => setCatTab(cat)}>
+              <Text style={[s.catChipText, catTab === cat && { color: '#FFF' }]}>{cat}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
 
       {/* List */}
       <FlatList
@@ -305,14 +314,14 @@ export default function VendorManagementScreen({ navigation }) {
 }
 
 const s = StyleSheet.create({
-  safe:     { flex: 1, backgroundColor: P.tealDark },
-  header:   { flexDirection: 'row', alignItems: 'center', backgroundColor: P.tealDark, padding: 16, paddingTop: 8 },
-  back:     { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-  backTxt:  { color: '#FFF', fontSize: 28, fontWeight: '300', lineHeight: 32 },
-  htitle:   { color: '#FFF', fontSize: 17, fontWeight: '800' },
-  hsub:     { color: 'rgba(255,255,255,0.7)', fontSize: 12, marginTop: 2 },
-  addHdr:   { backgroundColor: 'rgba(255,255,255,0.2)', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 10 },
-  addHdrTxt:{ color: '#FFF', fontWeight: '700', fontSize: 13 },
+  safe:        { flex: 1, backgroundColor: '#1A7A7A' },
+  header:      { backgroundColor: '#1A7A7A', paddingTop: 40, paddingBottom: 16, paddingHorizontal: 20 },
+  backText:    { color: 'rgba(255,255,255,0.85)', fontSize: 14, fontWeight: '600', marginBottom: 8 },
+  headerRow:   { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  headerTitle: { fontSize: 22, fontWeight: '900', color: '#FFF' },
+  headerSub:   { fontSize: 12, color: 'rgba(255,255,255,0.72)', marginTop: 1 },
+  addHdr:      { backgroundColor: 'rgba(255,255,255,0.2)', paddingHorizontal: 14, paddingVertical: 7, borderRadius: 20 },
+  addHdrTxt:   { color: '#FFF', fontWeight: '700', fontSize: 13 },
 
   statsBar:  { flexDirection: 'row', backgroundColor: P.tealDark, paddingHorizontal: 16, paddingBottom: 12 },
   statPill:  { flex: 1, alignItems: 'center' },
@@ -322,27 +331,27 @@ const s = StyleSheet.create({
   searchWrap:  { backgroundColor: P.bg, paddingHorizontal: 16, paddingTop: 12, paddingBottom: 4 },
   searchInput: { backgroundColor: P.surface, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 11, fontSize: 14, color: P.text, borderWidth: 1, borderColor: P.border },
 
-  catScroll: { backgroundColor: P.bg, paddingVertical: 8, maxHeight: 52 },
-  catChip:   { paddingHorizontal: 12, paddingVertical: 7, borderRadius: 20, borderWidth: 1.5, borderColor: P.border, backgroundColor: P.surface },
+  catWrap:   { backgroundColor: P.bg, paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: P.border },
+  catChip:   { paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20, borderWidth: 1, borderColor: P.border, backgroundColor: P.surface },
   catChipActive: { backgroundColor: P.teal, borderColor: P.teal },
-  catChipText:   { fontSize: 12, fontWeight: '600', color: P.textMuted },
+  catChipText:   { fontSize: 11, fontWeight: '600', color: P.textMuted },
 
-  vcard:    { backgroundColor: P.surface, borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: P.border },
-  vcardTop: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 12 },
-  vavatar:  { width: 48, height: 48, borderRadius: 14, backgroundColor: P.tealSoft, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
-  vname:    { fontSize: 15, fontWeight: '800', color: P.text, marginBottom: 2 },
-  vsub:     { fontSize: 12, color: P.textMuted, marginBottom: 4 },
-  vstatus:  { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 10 },
-  vstatusText: { fontSize: 11, fontWeight: '700' },
-  vmetaRow: { flexDirection: 'row', marginBottom: 10 },
+  vcard:    { backgroundColor: P.surface, borderRadius: 12, padding: 12, marginBottom: 8, borderWidth: 1, borderColor: P.border },
+  vcardTop: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8 },
+  vavatar:  { width: 38, height: 38, borderRadius: 10, backgroundColor: P.tealSoft, alignItems: 'center', justifyContent: 'center', marginRight: 10 },
+  vname:    { fontSize: 13, fontWeight: '800', color: P.text, marginBottom: 1 },
+  vsub:     { fontSize: 11, color: P.textMuted, marginBottom: 3 },
+  vstatus:  { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8 },
+  vstatusText: { fontSize: 10, fontWeight: '700' },
+  vmetaRow: { flexDirection: 'row', marginBottom: 8 },
   vmeta:    { flex: 1, alignItems: 'center' },
-  vmetaVal: { fontSize: 15, fontWeight: '800', color: P.text },
-  vmetaLabel:{ fontSize: 10, color: P.textMuted, fontWeight: '600', marginTop: 2 },
-  expiring: { backgroundColor: P.warningBg, borderRadius: 8, padding: 8, marginBottom: 10 },
-  expiringText: { fontSize: 12, color: P.warning, fontWeight: '700' },
-  vactions: { flexDirection: 'row', gap: 8 },
-  vbtn:     { flex: 1, borderRadius: 10, paddingVertical: 9, alignItems: 'center' },
-  vbtnText: { fontSize: 13, fontWeight: '700' },
+  vmetaVal: { fontSize: 13, fontWeight: '800', color: P.text },
+  vmetaLabel:{ fontSize: 9, color: P.textMuted, fontWeight: '600', marginTop: 1 },
+  expiring: { backgroundColor: P.warningBg, borderRadius: 6, padding: 6, marginBottom: 8 },
+  expiringText: { fontSize: 11, color: P.warning, fontWeight: '700' },
+  vactions: { flexDirection: 'row', gap: 6 },
+  vbtn:     { flex: 1, borderRadius: 8, paddingVertical: 7, alignItems: 'center' },
+  vbtnText: { fontSize: 12, fontWeight: '700' },
 
   empty:    { alignItems: 'center', paddingTop: 60 },
   emptyText:{ fontSize: 15, color: P.textMuted, fontWeight: '600' },
@@ -353,10 +362,6 @@ const s = StyleSheet.create({
   modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
   modalTitle:{ fontSize: 18, fontWeight: '800', color: P.text },
   modalInput:{ borderWidth: 1.5, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 11, fontSize: 14, borderColor: P.border, backgroundColor: P.bg, color: P.text },
-  modalBtn:  { backgroundColor: P.teal, borderRadius: 14, paddingVertical: 14, alignItems: 'center', marginTop: 12 },
+  modalBtn:    { backgroundColor: P.teal, borderRadius: 14, paddingVertical: 14, alignItems: 'center', marginTop: 12 },
   modalBtnText:{ color: '#FFF', fontWeight: '800', fontSize: 15 },
-  header:      { backgroundColor: '#1A7A7A', paddingTop: 40, paddingBottom: 16, paddingHorizontal: 20 },
-  backText:    { color: 'rgba(255,255,255,0.85)', fontSize: 14, fontWeight: '600', marginBottom: 8 },
-  headerTitle: { fontSize: 22, fontWeight: '900', color: '#FFF', marginBottom: 2 },
-  headerSub:   { fontSize: 12, color: 'rgba(255,255,255,0.72)', marginTop: 1 },
 });
