@@ -428,4 +428,3 @@ const s = StyleSheet.create({
   barFill:      { height: 6, borderRadius: 4 },
 });
 
-export default AdminPlatformActivityScreen;
